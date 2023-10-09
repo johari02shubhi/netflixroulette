@@ -1,17 +1,48 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
+import Counter from './components/counter.js';
+import SearchForm from './components/searchform.js';
+import GenreSelect from './components/genreselect.js';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './css/header.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedgenre: null, 
+    };
+  }
+
+  handleSearch = (query) => {
+    alert(`Searching for: ${query}`);
+  };
+
+  handleGenreSelect = (genre) => {
+    this.setState({ selectedgenre: genre });
+    alert(`Selected genre: ${genre}`);
+  };
+
+  render() {
+    const selectedgenre = this.state.selectedgenre;
+    return (
+      <div className="div-container">
+        <Counter initialValue={0} />
+        <SearchForm
+          initialQuery="What do you want to watch?"
+          onSearch={this.handleSearch}
+        />
+        <GenreSelect
+          genres={['All', 'Documentary', 'Comedy', 'Horror', 'Crime']}
+          selectedGenre={selectedgenre}
+          onSelect={this.handleGenreSelect}
+        />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  React.createElement(App),
+  document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

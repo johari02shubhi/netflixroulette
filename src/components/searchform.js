@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './SearchComponent.css';
+import '../css/searchform.css';
 
-const SearchComponent = ({ initialQuery, onSearch }) => {
+const SearchForm = ({ initialQuery, onSearch }) => {
   const [query, setQuery] = useState(initialQuery);
 
   const handleInputChange = (event) => {
@@ -19,17 +19,18 @@ const SearchComponent = ({ initialQuery, onSearch }) => {
   };
 
   return (
-    <div>
+    <div className="form-container">
+      <p className="header-element">FIND YOUR MOVIE</p>
       <input
+        className="form-input"
         type="text"
-        placeholder="Enter your search query..."
         value={query}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
       />
-      <button onClick={handleSearchClick}>Search</button>
+      <button className="form-button" onClick={handleSearchClick}>Search</button>
     </div>
   );
 };
 
-export default SearchComponent;
+export default SearchForm;
