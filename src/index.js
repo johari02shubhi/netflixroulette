@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Counter from './components/counter.js';
-import SearchForm from './components/searchform.js';
-import GenreSelect from './components/genreselect.js';
+import Counter from './components/counter';
+import SearchForm from './components/searchform';
+import GenreSelect from './components/genreselect';
 import './index.css';
 import './css/header.css'
 
@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedgenre: null, 
+      selectedgenre: 'All', 
     };
   }
 
