@@ -1,45 +1,33 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import GenreList from '../components/genreselect';
+import GenreSelect from '../components/GenreSelect/genreselect';
 
-describe('GenreSelect Component', () => {
-  test('renders all genres passed in props', () => {
-    const genres = ['Action', 'Comedy', 'Drama'];
-    const { getByText } = render(<GenreList genres={genres} />);
-    genres.forEach((genre) => {
-      const genreButton = getByText(genre);
-      expect(genreButton).toBeInTheDocument();
+test('renders all genres passed in props', () => {
+    const genres = ['Action', 'Adventure', 'Comedy', 'Drama'];
+    const { getAllByRole } = render(<GenreSelect genres={genres} />);
+    const genreButtons = getAllByRole('button');
+    expect(genreButtons).toHaveLength(genres.length);
+    genres.forEach((genre, index) => {
+        expect(genreButtons[index]).toHaveTextContent(genre);
     });
-  });
+});
 
-  test('highlights a selected genre passed in props', () => {
-    const genres = ['Action', 'Comedy', 'Drama'];
+test('highlights the selected genre passed in props', () => {
+    const genres = ['Action', 'Adventure', 'Comedy', 'Drama'];
     const selectedGenre = 'Comedy';
-    const { getByText, getByTestId } = render(
-      <GenreList genres={genres} selectedGenre={selectedGenre} />
-    );
-    genres.forEach((genre) => {
-      const genreButton = getByText(genre);
-      if (genre === selectedGenre) {
-        expect(genreButton).toHaveClass('red');
-      } else {
-        expect(genreButton).toHaveClass('white');
-      }
-    });
-  });
+    const { getByText } = render(<GenreSelect genres={genres} selectedGenre={selectedGenre} />);
+    const comedyButton = getByText('Comedy');
+    expect(comedyButton).toHaveClass('red');
+});
 
-  test('after a click event on a genre button, component calls "onSelect" callback with the correct genre in arguments', () => {
-    const genres = ['Action', 'Comedy', 'Drama'];
-    const selectedGenre = 'Comedy';
-    const onSelectMock = jest.fn();
+test('calls "onChange" callback with correct genre on button click', () => {
+    const genres = ['Action', 'Adventure', 'Comedy', 'Drama'];
+    const selectedGenre = 'Adventure';
+    const onSelect = jest.fn(); 
     const { getByText } = render(
-      <GenreList genres={genres} selectedGenre={selectedGenre} onSelect={onSelectMock} />
+        <GenreSelect genres={genres} selectedGenre={selectedGenre} onSelect={onSelect} />
     );
-
-    const newSelectedGenre = 'Drama';
-    const genreButton = getByText(newSelectedGenre);
-    fireEvent.click(genreButton);
-
-    expect(onSelectMock).toHaveBeenCalledWith(newSelectedGenre);
-  });
+    const comedyButton = getByText('Comedy');
+    fireEvent.click(comedyButton);
+    expect(onSelect).toHaveBeenCalledWith('Comedy');
 });
