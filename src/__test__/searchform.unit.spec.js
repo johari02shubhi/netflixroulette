@@ -1,32 +1,37 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import SearchForm from '../components/SearchForm/searchform';
+import SearchForm from '../components/searchform';
 
-const mockOnSearch = jest.fn(); 
+describe('SearchForm Component', () => {
+  test('renders an input with the value equal to initial value passed in props', () => {
+    const initialQuery = 'Initial Value';
+    const { getByDisplayValue } = render(<SearchForm initialQuery={initialQuery} />);
+    const inputElement = getByDisplayValue(initialQuery);
+    expect(inputElement).toBeInTheDocument();
+  });
 
-test('renders an input with the value equal to initial value passed in props', () => {
-  const { getByRole } = render(<SearchForm initialSearchQuery="Initial Value" />);
-  const input = getByRole('textbox');
-  expect(input).toHaveValue('Initial Value');
-});
+  test('after typing into the input and clicking the Submit button, the "onSearch" prop is called with the proper value', () => {
+    const onSearchMock = jest.fn();
+    const { getByText, getByRole } = render(<SearchForm initialQuery="" onSearch={onSearchMock} />);
+    const inputElement = getByRole('textbox');
+    const submitButton = getByText('Search');
+    const inputValue = 'Test Value';
 
-test('calls the "onSearch" prop with proper value after clicking Submit button', () => {
-  const { getByRole, getByText } = render(<SearchForm onSearch={mockOnSearch} />);
-  const input = getByRole('textbox');
-  const submitButton = getByText('Search');
+    fireEvent.change(inputElement, { target: { value: inputValue } });
+    fireEvent.click(submitButton);
 
-  fireEvent.change(input, { target: { value: 'Search Query' } });
-  fireEvent.click(submitButton);
+    expect(onSearchMock).toHaveBeenCalledWith(inputValue);
+  });
 
-  expect(mockOnSearch).toHaveBeenCalledWith('Search Query');
-});
+  test('after typing into the input and pressing Enter key, the "onSearch" prop is called with the proper value', () => {
+    const onSearchMock = jest.fn();
+    const { getByRole } = render(<SearchForm initialQuery="" onSearch={onSearchMock} />);
+    const inputElement = getByRole('textbox');
+    const inputValue = 'Test Value';
 
-test('calls the "onSearch" prop with proper value after pressing Enter key', () => {
-  const { getByRole } = render(<SearchForm onSearch={mockOnSearch} />);
-  const input = getByRole('textbox');
+    fireEvent.change(inputElement, { target: { value: inputValue } });
+    fireEvent.keyPress(inputElement, { key: 'Enter', code: 'Enter', charCode: 13 });
 
-  fireEvent.change(input, { target: { value: 'Search Query' } });
-  fireEvent.keyPress(input, { key: 'Enter', code: 13, charCode: 13 });
-
-  expect(mockOnSearch).toHaveBeenCalledWith('Search Query');
+    expect(onSearchMock).toHaveBeenCalledWith(inputValue);
+  });
 });

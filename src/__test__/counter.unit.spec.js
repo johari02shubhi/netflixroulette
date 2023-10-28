@@ -1,34 +1,32 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import Counter from '../components/Counter/counter';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import Counter from '../components/counter';
 
-test('Counter component renders initial value provided in props', () => {
-    const counterComponent = new Counter({ initialValue: 5 });
-    expect(counterComponent.getValue()).toBe(5);
-});
+describe('Counter Component', () => {
 
-test('Counter renders the initial value provided in props', () => {
-    const { getByText } = render(<Counter initialValue={5} />);
-    const counterValue = getByText('Counter Value: 5');
-    expect(counterValue).toBeInTheDocument();
-});
+  test('renders initial value provided in props', () => {
+    const { getByText } = render(<Counter initialValue={5}/>);
+    const valueElement = getByText('Value: 5');
+    expect(valueElement).toBeInTheDocument();
+  });
 
-test('Clicking the "decrement" button decrements the displayed value', () => {
-    const { getByText } = render(<Counter initialValue={3} />);
+  test('clicking "decrement" button decrements the displayed value', () => {
+    const { getByText } = render(<Counter initialValue={10} />);
     const decrementButton = getByText('Decrement');
-    const counterValue = getByText('Counter Value: 3');
+    const valueElement = getByText('Value: 10');
 
     fireEvent.click(decrementButton);
 
-    expect(counterValue).toHaveTextContent('Counter Value: 2');
-});
+    expect(valueElement).toHaveTextContent('Value: 9');
+  });
 
-test('Clicking the "increment" button increments the displayed value', () => {
-    const { getByText } = render(<Counter initialValue={2} />);
+  test('clicking "increment" button increments the displayed value', () => {
+    const { getByText } = render(<Counter initialValue={5} />);
     const incrementButton = getByText('Increment');
-    const counterValue = getByText('Counter Value: 2');
+    const valueElement = getByText('Value: 5');
 
     fireEvent.click(incrementButton);
 
-    expect(counterValue).toHaveTextContent('Counter Value: 3');
+    expect(valueElement).toHaveTextContent('Value: 6');
+  });
 });
