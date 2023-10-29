@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import GenreSelect from '../components/GenreSelect/genreselect';
+import GenreSelect from '../components/SortAndGenreControl/GenreSelect';
 
 test('renders all genres passed in props', () => {
     const genres = ['Action', 'Adventure', 'Comedy', 'Drama'];

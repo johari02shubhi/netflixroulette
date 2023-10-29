@@ -1,45 +1,47 @@
-import React from 'react';
+import React, { useState } from "react";
 import Counter from "./components/Counter/counter";
 import SearchForm from "./components/SearchForm/searchform";
-import GenreSelect from "./components/GenreSelect/genreselect";
 import "./index.css";
 import "./components/Header/header.css";
+import MoviesList from "./components/Movies/MovieList";
+import SortAndGenreControl from "./components/SortAndGenreControl/SortAndGenreControl";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedgenre: null,
-    };
-  }
+const App = () => {
+  const [selectedgenre, setSelectedGenre] = useState("All");
+  const [currentSort, setCurrentSort] = useState("releaseDate");
 
-  handleSearch = (query) => {
+  const handleSearch = (query) => {
     alert(`Searching for: ${query}`);
   };
 
-  handleGenreSelect = (genre) => {
-    this.setState({ selectedgenre: genre });
+  const handleGenreSelect = (genre) => {
+    setSelectedGenre(genre);
     alert(`Selected genre: ${genre}`);
   };
 
-  render() {
-    const selectedgenre = this.state.selectedgenre;
-    return React.createElement(
-      "div",
-      { className: "div-container" },
-      React.createElement(Counter, { initialValue: 0 }),
-      React.createElement(SearchForm, {
-        initialSearchQuery: "What do you want to watch?",
-        onSearch: this.handleSearch,
-      }),
-      React.createElement(GenreSelect, {
-        genres: ["All", "Documentry", "Comedy", "Horror", "Crime"],
-        selectedGenre: selectedgenre,
-        onSelect: this.handleGenreSelect,
-      }),
+  const handleSortChange = (sortOption) => {
+    setCurrentSort(sortOption);
+  };
+
+  return (
+    <div className="div-container">
+      <Counter initialValue={0} />
+      <SearchForm
+        initialSearchQuery="What do you want to watch?"
+        onSearch={handleSearch}
+      />
+      <SortAndGenreControl
+        genres={["All", "Documentary", "Comedy", "Horror", "Crime"]}
+        selectedGenre={selectedgenre}
+        onSelect={handleGenreSelect}
+        currentSort={currentSort}
+        onSortChange={handleSortChange}
+      />
       <br />
-    );
-  }
-}
+      <MoviesList />
+      <br />
+    </div>
+  );
+};
 
 export default App;
