@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "./movie.css";
+import "./movieDetails.css";
 
 class MovieDetails extends Component {
   render() {
@@ -31,7 +31,7 @@ MovieDetails.propTypes = {
     year: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
     runtime: PropTypes.string.isRequired,
-    overview: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
   }).isRequired,
 };
 
