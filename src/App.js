@@ -10,14 +10,14 @@ import AddMovie from "./components/Movies/AddMovie/AddMovie";
 const App = () => {
   const [selectedgenre, setSelectedGenre] = useState("All");
   const [currentSort, setCurrentSort] = useState("releaseDate");
+  const [searchString, setSearchString] = useState('');
 
   const handleSearch = (query) => {
-    alert(`Searching for: ${query}`);
+    setSearchString(query);
   };
 
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre);
-    alert(`Selected genre: ${genre}`);
   };
 
   const handleSortChange = (sortOption) => {
@@ -26,23 +26,22 @@ const App = () => {
 
   return (
     <div className="div-container">
-      <Counter initialValue={0} />
-      <AddMovie />
-      <SearchForm
-        initialSearchQuery="What do you want to watch?"
-        onSearch={handleSearch}
-      />
-      <SortAndGenreControl
-        genres={["All", "Documentary", "Comedy", "Horror", "Crime"]}
-        selectedGenre={selectedgenre}
-        onSelect={handleGenreSelect}
-        currentSort={currentSort}
-        onSortChange={handleSortChange}
-      />
-      <br />
-      <MoviesList />
-      <br />
-    </div>
+    <Counter initialValue={0} />
+    <AddMovie />
+    <SearchForm onSearch={handleSearch} />
+    <SortAndGenreControl
+      genres={["All", "Action", "Comedy", "Horror", "Crime"]}
+      selectedGenre={selectedgenre}
+      onSelect={handleGenreSelect}
+      currentSort={currentSort}
+      onSortChange={handleSortChange}
+    />
+    <MoviesList
+      selectedGenre={selectedgenre}
+      currentSort={currentSort}
+      searchString={searchString}
+    />
+  </div>
   );
 };
 
