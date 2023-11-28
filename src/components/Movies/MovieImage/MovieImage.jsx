@@ -7,11 +7,26 @@ import MovieDetails from "../MovieDetails/MovieDetails";
 import DeleteConfirmationDialog from "../DeleteMovie/DeleteConfirmationDialog";
 import "../SuccessMessage/successMessage.css";
 import MovieForm from "../MovieForm/MovieForm";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 class MovieImage extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
+  removePathParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = '/';
+    var newUrl = `${newPath}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
+  addPathParam = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const newPath = `/${this.props.film.id}`;
+    const newUrl = `${newPath}`;
+    window.history.pushState({}, '', newUrl);
   }
 
   state = {
@@ -30,8 +45,10 @@ class MovieImage extends Component {
   toggleModal = () => {
     this.setState({ showModal: !this.state.showModal }, () => {
       if (this.state.showModal) {
+        this.addPathParam();
         document.addEventListener("keydown", this.handleKeyPress);
       } else {
+        this.removePathParam();
         document.removeEventListener("keydown", this.handleKeyPress);
       }
     });
@@ -39,6 +56,7 @@ class MovieImage extends Component {
 
   handleKeyPress = (event) => {
     if (event.keyCode === 27) {
+      this.removePathParam();
       this.setState({ showModal: false });
     }
   };
