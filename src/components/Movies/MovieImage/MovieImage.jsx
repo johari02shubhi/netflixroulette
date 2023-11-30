@@ -7,26 +7,14 @@ import MovieDetails from "../MovieDetails/MovieDetails";
 import DeleteConfirmationDialog from "../DeleteMovie/DeleteConfirmationDialog";
 import "../SuccessMessage/successMessage.css";
 import MovieForm from "../MovieForm/MovieForm";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { MOVIES_BASE_URL } from "../../constants";
+import axios from "axios";
+
 
 class MovieImage extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
-
-  removePathParam = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const newPath = '/';
-    var newUrl = `${newPath}`;
-    window.history.pushState({}, '', newUrl);
-  }
-
-  addPathParam = () => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const newPath = `/${this.props.film.id}`;
-    const newUrl = `${newPath}`;
-    window.history.pushState({}, '', newUrl);
   }
 
   state = {
@@ -42,6 +30,20 @@ class MovieImage extends Component {
     this.setState({ showEditDialog: false });
   };
 
+  removePathParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = '/';
+    var newUrl = `${newPath}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
+  addPathParam = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const newPath = `/${this.props.film.id}`;
+    const newUrl = `${newPath}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
   toggleModal = () => {
     this.setState({ showModal: !this.state.showModal }, () => {
       if (this.state.showModal) {
@@ -56,8 +58,8 @@ class MovieImage extends Component {
 
   handleKeyPress = (event) => {
     if (event.keyCode === 27) {
-      this.removePathParam();
       this.setState({ showModal: false });
+      this.removePathParam();
     }
   };
 
@@ -85,7 +87,13 @@ class MovieImage extends Component {
     }, 2000);
   };
 
-  handleEditSubmit = () => {
+  updateMovie = async (formData) => {
+    console.log('in edit movie ' + JSON.stringify(formData));
+    await axios.put(MOVIES_BASE_URL, formData);
+  }
+
+  handleEditSubmit = (formData) => {
+    this.updateMovie(formData);
     this.setState({ edited: true });
     this.setState({ showEditDialog: false });
     setTimeout(() => {
@@ -126,6 +134,7 @@ class MovieImage extends Component {
             initialMovieInfo={this.props.film}
             onClose={this.closeEditDialog}
             onSubmit={this.handleEditSubmit}
+            formType='edit'
           />
         )}
 
@@ -162,4 +171,3 @@ MovieImage.propTypes = {
 };
 
 export default MovieImage;
-

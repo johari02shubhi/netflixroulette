@@ -6,6 +6,7 @@ import MovieDetails from "../MovieDetails/MovieDetails";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { MOVIES_BASE_URL } from "../../constants";
 
 const MoviesList = (props) => {
   const [moviesResponse, setMoviesResponse] = useState([]);
@@ -56,7 +57,7 @@ const MoviesList = (props) => {
 
   const fetchMoviesData = async (searchString, selectedGenre) => {
     try {
-      const url = new URL(GET_MOVIES_ENDPOINT);
+      const url = new URL(MOVIES_BASE_URL);
       url.searchParams.append("sortBy", props.currentSort);
       url.searchParams.append("limit", limit);
       url.searchParams.append("offset", offset);

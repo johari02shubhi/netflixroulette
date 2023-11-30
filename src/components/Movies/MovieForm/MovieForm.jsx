@@ -8,15 +8,16 @@ class MovieForm extends Component {
 
     this.state = {
       formData: props.initialMovieInfo || {
-        name: "",
-        year: "",
-        movieUrl: "",
-        vote_average: "",
-        genres: "",
-        runtime: "",
+        title: "",
+        release_date: "",
+        poster_path: "",
+        vote_average: 0,
+        genres: [],
+        runtime: 0,
+        tagline: "",
         overview: "",
       },
-      formType: "",
+      formType: props.formType || "",
     };
   }
 
@@ -32,7 +33,11 @@ class MovieForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.formData);
+      console.log('form type ' + this.state.formType)
+      if (this.state.formType !== 'edit') {
+        const genresArray = this.state.formData.genres.split(',').map(genre => genre.trim());
+        this.state.formData.genres = genresArray;
+      }
     }
   };
 
@@ -49,8 +54,8 @@ class MovieForm extends Component {
               Title
               <input
                 type="text"
-                name="name"
-                value={this.state.formData.name}
+                name="title"
+                value={this.state.formData.title}
                 onChange={this.handleInputChange}
               />
             </label>
@@ -58,8 +63,8 @@ class MovieForm extends Component {
               Movie Url
               <input
                 type="text"
-                name="movieUrl"
-                value={this.state.formData.pictureURL}
+                name="poster_path"
+                value={this.state.formData.poster_path}
                 onChange={this.handleInputChange}
               />
             </label>
@@ -75,7 +80,7 @@ class MovieForm extends Component {
             <label>
               Rating
               <input
-                type="text"
+                type="number"
                 name="vote_average"
                 value={this.state.formData.vote_average}
                 onChange={this.handleInputChange}
@@ -84,7 +89,7 @@ class MovieForm extends Component {
             <label>
               Runtime
               <input
-                type="text"
+                type="number"
                 name="runtime"
                 value={this.state.formData.runtime}
                 onChange={this.handleInputChange}
@@ -94,8 +99,17 @@ class MovieForm extends Component {
               Release Date
               <input
                 type="text"
-                name="year"
-                value={this.state.formData.year}
+                name="release_date"
+                value={this.state.formData.release_date}
+                onChange={this.handleInputChange}
+              />
+            </label>
+            <label>
+              Tagline
+              <input
+                type="text"
+                name="tagline"
+                value={this.state.formData.tagline}
                 onChange={this.handleInputChange}
               />
             </label>
